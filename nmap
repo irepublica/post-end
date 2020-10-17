@@ -1,0 +1,14 @@
+# ping scan
+# MAC, some may not response to ping request
+nmap -sn 192.168.1.1/24
+
+# quick scan
+# +open ports and service
+nmap -T4 -F [ip]
+
+# quick scan plus 
+# +version, OS, device details
+nmap -sV -T4 -O -F --version-light [ip]
+
+# 
+
