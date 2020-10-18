@@ -29,6 +29,7 @@ arp.spoof on
 # sniff packets, can see http
 # sniff even if packets run from own machine
 set net.sniff.local true
+set net.sniff.output /root/capturefile.cap
 net.sniff on
 
 
