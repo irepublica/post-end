@@ -1,0 +1,4 @@
+# file -> open can open .cap file with packets history
+# options button can manage input and output files
+# filter "http", "https" 
+# POST requests contain login infomation
