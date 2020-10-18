@@ -10,5 +10,11 @@ nmap -T4 -F [ip]
 # +version, OS, device details
 nmap -sV -T4 -O -F --version-light [ip]
 
-# 
+# common flag
+-sS   # stealth scan
+-sU   # UDP scan
+-vv   # very verbose
+-T5   # insane max level
+-p-   # all ports
+--script vuln   # run all scripts out of vulnerbility
 
